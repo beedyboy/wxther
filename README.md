@@ -1,16 +1,7 @@
 # wxther
 
-24-hour developer challenge for agxncy.ai. London-focused weather app where the forecast triggers useful recommendations rather than being the destination.
+London-focused weather app where the forecast triggers useful recommendations rather than being the destination.
 
-## Run it
-
-```bash
-npm install
-cp .env.example .env.local
-# add ANTHROPIC_API_KEY, or set USE_MOCK_CARDS=true
-npm run dev
-```
-Open in Chrome DevTools at iPhone 14 Pro size.
 
 ## How I read the brief
 
@@ -42,9 +33,6 @@ The card lifecycle (generate → render → dismiss → empty) sits at the centr
 
 The principle behind every cut: anything that didn't survive the dismiss interaction got cut. The dismiss interaction is the product.
 
-## A misread I caught
-
-First pass at categories was `commute / clothing / opportunity / general`. Brief explicitly says **shoes / commute / music**. I caught it on review and corrected — `clothing → shoes` (more specific, better for affiliates), and added `music` as a first-class category. Lesson: copy the brief's vocabulary into the schema on day zero, don't translate it.
 
 ## Architecture choices worth defending
 
@@ -81,3 +69,29 @@ First pass at categories was `commute / clothing / opportunity / general`. Brief
 - Push notifications when weather changes invalidate active cards
 - Evals harness — fixture set of (weather, expected categories) pairs
 - Affiliate / partnership integrations on Save Deal cards. The natural monetisation path.
+
+
+
+## Quick Start Installation
+
+1. Clone the repository and navigate inside:
+   ```bash
+   git clone <repo-url>
+   cd wxther
+   
+## Run it
+
+```bash
+npm install
+cp .env.example .env.local
+# add ANTHROPIC_API_KEY, or set USE_MOCK_CARDS=true
+npm run dev
+```
+Open in Chrome DevTools at iPhone 14 Pro size.
+
+
+## 🛠️ Tech Stack & Packages
+- **Framework:** Next.js 16 (App Router, Tailwind CSS, TypeScript)
+- **Animation Framework:** Framer Motion
+- **Icons:** Public assets and custom svg icons
+- **AI Integrations:** Anthropic API (Claude) (with structured JSON Output schemas)

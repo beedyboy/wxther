@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { Weather } from "@/types";
 import { mockCards } from "@/lib/mock-cards";
-// import { generate } from "@/lib/claude";
+import { generate } from "@/lib/claude";
 
 const useMock = process.env.USE_MOCK_CARDS === "true" || !process.env.ANTHROPIC_API_KEY;
 
@@ -19,8 +19,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    // const cards = useMock ? mockCards(weather) : await generate(weather);
-    const cards = mockCards(weather);
+    const cards = useMock ? mockCards(weather) : await generate(weather);
     
     return NextResponse.json({ cards });
   } catch (e) {
