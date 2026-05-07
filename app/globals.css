@@ -11,7 +11,7 @@ body {
   min-height: 100vh;
   background: #D0D9DC;
   color: white;
-  overscroll-behavior-y: contain;
+  /* overscroll-behavior-y: contain; */
   -webkit-font-smoothing: antialiased;
 }
 

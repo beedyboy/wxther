@@ -27,10 +27,10 @@ function CardView({
   };
 
   return (
-    <div className="flex w-full flex-col items-center gap-4 rounded-3xl bg-black/20 p-3">
-      <div className="flex w-full items-start gap-4">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white outline outline-[0.5px] -outline-offset-[0.5px] outline-white/20">
-          <Icon name={CAT_ICON[card.category]} size={20} alt={card.category} />
+     <div className="flex w-full flex-col items-center gap-4 rounded-[28px] border border-white/10 bg-black/20 p-4 shadow-panel backdrop-blur-panel">
+     <div className="flex w-full items-start gap-4">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] border border-white/20 bg-white/10 text-white shadow-sm">
+          <Icon name={CAT_ICON[card.category]} size={22} alt={card.category} />
         </div>
 
         <div className="flex flex-1 flex-col gap-1">
