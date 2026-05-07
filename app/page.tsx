@@ -50,7 +50,7 @@ export default function Page() {
         )}
       </div>
 
-      <section className="flex flex-1 flex-col">
+      <section className="flex flex-col">
         <h2 className="px-4 pb-2 pt-4 text-base font-medium">Suggested Actions</h2>
 
         {(wErr || rErr) && (
