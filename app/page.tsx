@@ -1,65 +1,82 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useMemo, useState } from "react";
+import { Background } from "@/components/Background";
+import { StatusBar } from "@/components/StatusBar";
+import { Header } from "@/components/Header";
+import { Cards } from "@/components/Cards";
+import { Empty } from "@/components/Empty";
+import { useWeather } from "@/lib/use-weather";
+import { useRecs } from "@/lib/use-recs";
+
+export default function Page() {
+  const { weather, error: wErr } = useWeather();
+  const { cards: serverCards, error: rErr, loading: rLoading } = useRecs(weather);
+
+  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+
+  const cards = useMemo(() => {
+    if (!serverCards) return [];
+    return serverCards.filter((c) => !dismissed.has(c.id));
+  }, [serverCards, dismissed]);
+
+  const dismiss = (id: string) => {
+    setDismissed((s) => {
+      const next = new Set(s);
+      next.add(id);
+      return next;
+    });
+  };
+
+  const onAction = (id: string, intent: string) => {
+    if (process.env.NODE_ENV !== "production") {
+      console.log("action", { id, intent });
+    }
+  };
+
+  const showEmpty = !rLoading && !!serverCards && cards.length === 0;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="relative flex min-h-screen flex-col">
+      <Background />
+      <StatusBar />
+
+      {/* sticky so suggestions scroll up underneath the frosted glass */}
+      <div className="sticky top-0 z-20">
+        {weather ? (
+          <Header weather={weather} />
+        ) : (
+          <div className="h-[322px] animate-pulse rounded-b-panel bg-white/10" />
+        )}
+      </div>
+
+      <section className="flex flex-1 flex-col">
+        <h2 className="px-4 pb-2 pt-4 text-base font-medium">Suggested Actions</h2>
+
+        {(wErr || rErr) && (
+          <div className="mx-4 mt-2 rounded-3xl bg-black/20 p-4 text-sm text-white/80">
+            Couldn&apos;t load suggestions. {wErr ?? rErr}
+          </div>
+        )}
+
+        {rLoading && (
+          <ul className="flex flex-col gap-4 px-4 pb-6 pt-2">
+            {[0, 1, 2].map((i) => (
+              <li
+                key={i}
+                className="h-[148px] animate-pulse rounded-3xl bg-white/10"
+                style={{ animationDelay: `${i * 100}ms` }}
+              />
+            ))}
+          </ul>
+        )}
+
+        {showEmpty ? (
+          <Empty />
+        ) : !rLoading ? (
+          <Cards cards={cards} onDismiss={dismiss} onAction={onAction} />
+        ) : null}
+      </section>
+    </main>
   );
 }
