@@ -2,17 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-  height: 100%;
-  overscroll-behavior: none;
+html {
+  min-height: 100%;
+  width: 100%;
 }
 
 body {
+  min-height: 100vh;
   background: #D0D9DC;
   color: white;
+  overscroll-behavior-y: contain;
   -webkit-font-smoothing: antialiased;
 }
 
-/* hide horizontal scrollbars on the hourly strip */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }

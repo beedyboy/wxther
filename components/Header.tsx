@@ -1,12 +1,11 @@
-import { Pin, Drop, Cloud, PartCloud, Sun, Icon } from "./icons";
+import { Icon } from "./icons";
 import type { Condition, Weather } from "@/types";
 
-function HourIcon({ c }: { c: Condition }) {
-  if (c === "clear") return <Sun className="text-white" />;
-  if (c === "part-cloud" || c === "fog") return <PartCloud className="text-white" />;
-  if (c === "rain" || c === "drizzle" || c === "storm" || c === "snow")
-    return <Drop className="text-white" />;
-  return <Cloud className="text-white" />;
+function condIcon(c: Condition): string {
+  if (c === "clear") return "sun";
+  if (c === "part-cloud" || c === "fog") return "part-cloud";
+  if (c === "rain" || c === "drizzle" || c === "storm" || c === "snow") return "rain";
+  return "cloud";
 }
 
 export function Header({ weather }: { weather: Weather }) {
@@ -22,7 +21,7 @@ export function Header({ weather }: { weather: Weather }) {
         <div className="flex items-start justify-between gap-6">
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-2 text-white/80">
-              <Pin className="text-white/90" />
+              <Icon name="location" />
               <span className="text-base font-medium">{weather.place}</span>
             </div>
 
@@ -33,7 +32,7 @@ export function Header({ weather }: { weather: Weather }) {
               <div className="flex flex-col gap-2 pb-2">
                 <span className="text-base font-medium">{weather.description}</span>
                 <div className="flex items-center gap-2 text-white/75">
-                  <Drop className="text-white/75" />
+                  <Icon name="rain" />
                   <span className="text-sm font-medium">
                     {weather.rainPct}% chance of rain
                   </span>
@@ -43,7 +42,7 @@ export function Header({ weather }: { weather: Weather }) {
           </div>
 
           <button className="text-white/60" aria-label="Settings">
-           <Icon name="settings" size={24} />
+            <Icon name="settings" size={24} />
           </button>
         </div>
 
@@ -65,7 +64,7 @@ export function Header({ weather }: { weather: Weather }) {
               ].join(" ")}
             >
               <span className="whitespace-nowrap text-xs font-medium">{h.label}</span>
-              <HourIcon c={h.condition} />
+              <Icon name={condIcon(h.condition)} />
               <span className="text-xs font-medium">{h.temp}°</span>
             </div>
           ))}
